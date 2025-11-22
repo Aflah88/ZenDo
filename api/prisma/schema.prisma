@@ -1,0 +1,17 @@
+datasource db {
+  provider = "mysql" // atau postgresql
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Barang {
+  id        Int     @id @default(autoincrement())
+  kode      String  @unique
+  nama      String
+  satuan    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
