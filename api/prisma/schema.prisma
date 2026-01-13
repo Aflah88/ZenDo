@@ -1,18 +1,30 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+model Task {
+  id        String     @id @default(cuid())
+  title     String     @db.VarChar(255)
+  description String?  @db.Text
+  completed Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  priority  Priority   @default(MEDIUM)
+  dueDate   DateTime?
+  tags      String[]   @default([])
 
-model tb_tugas {
-  id        Int     @id @default(autoincrement())
-  kode      String  @unique
-  nama      String
-  satuan    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@index([completed])
+  @@index([createdAt])
+  @@map("tasks")
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
 }
