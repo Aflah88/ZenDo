@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { CheckCircle2, Circle, Trash2 } from 'lucide-react';
+import { CheckCircle2, Circle, Trash2 } from "lucide-react";
 
 interface Task {
   id: string;
   title: string;
   description?: string;
   completed: boolean;
-  priority: 'LOW' | 'MEDIUM' | 'HIGH';
+  priority: "LOW" | "MEDIUM" | "HIGH";
   createdAt: string;
   dueDate?: string;
   tags: string[];
@@ -25,14 +25,14 @@ interface TaskListProps {
 
 const getPriorityColor = (priority: string) => {
   switch (priority) {
-    case 'HIGH':
-      return 'bg-red-100 text-red-700';
-    case 'MEDIUM':
-      return 'bg-yellow-100 text-yellow-700';
-    case 'LOW':
-      return 'bg-green-100 text-green-700';
+    case "HIGH":
+      return "bg-red-100 text-red-700";
+    case "MEDIUM":
+      return "bg-yellow-100 text-yellow-700";
+    case "LOW":
+      return "bg-green-100 text-green-700";
     default:
-      return 'bg-gray-100 text-gray-700';
+      return "bg-gray-100 text-gray-700";
   }
 };
 
@@ -69,7 +69,9 @@ export function TaskList({
           key={task.id}
           onClick={() => focusMode && onSelectTask(task.id)}
           className={`p-4 flex items-start gap-4 border-b hover:bg-gray-50 transition cursor-pointer ${
-            selectedTaskId === task.id && focusMode ? 'bg-indigo-50 border-l-4 border-indigo-600' : ''
+            selectedTaskId === task.id && focusMode
+              ? "bg-indigo-50 border-l-4 border-indigo-600"
+              : ""
           }`}
         >
           <button
@@ -89,7 +91,7 @@ export function TaskList({
           <div className="flex-1 min-w-0">
             <p
               className={`text-lg font-medium break-words ${
-                task.completed ? 'line-through text-gray-400' : 'text-gray-800'
+                task.completed ? "line-through text-gray-400" : "text-gray-800"
               }`}
             >
               {task.title}
@@ -98,11 +100,20 @@ export function TaskList({
               <p className="text-sm text-gray-600 mt-1">{task.description}</p>
             )}
             <div className="flex gap-2 mt-2">
-              <span className={`px-2 py-1 rounded text-xs font-semibold ${getPriorityColor(task.priority)}`}>
-                {task.priority === 'HIGH' ? '🔴' : task.priority === 'MEDIUM' ? '🟡' : '🟢'} {task.priority}
+              <span
+                className={`px-2 py-1 rounded text-xs font-semibold ${getPriorityColor(
+                  task.priority
+                )}`}
+              >
+                {task.priority === "HIGH"
+                  ? "🔴"
+                  : task.priority === "MEDIUM"
+                  ? "🟡"
+                  : "🟢"}{" "}
+                {task.priority}
               </span>
               <p className="text-xs text-gray-400">
-                {new Date(task.createdAt).toLocaleDateString('id-ID')}
+                {new Date(task.createdAt).toLocaleDateString("id-ID")}
               </p>
             </div>
           </div>
