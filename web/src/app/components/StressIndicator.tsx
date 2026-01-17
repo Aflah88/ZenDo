@@ -1,94 +1,77 @@
 'use client';
 
-import { Smile, Meh, AlertTriangle, Activity } from "lucide-react";
+import { Activity, Smile, Frown, Meh } from 'lucide-react';
 
-interface StressIndicatorProps {
-  activeTasks: number;
-  totalTasks: number;
+export interface StressIndicatorProps {
+  taskCount: number;    
+  activeTasks?: number;  
+  totalTasks?: number;   
 }
 
-export function StressIndicator({ activeTasks, totalTasks }: StressIndicatorProps) {
-  const getStressLevel = () => {
-    if (activeTasks <= 3) {
-      return {
-        level: 'Rendah',
-        color: 'text-emerald-700',
-        bg: 'bg-emerald-50',
-        border: 'border-emerald-100',
-        barColor: 'bg-emerald-500',
-        icon: <Smile size={28} strokeWidth={2.5} />,
-        message: 'Pikiran tenang, performa maksimal.'
-      };
-    }
-    if (activeTasks <= 7) {
-      return {
-        level: 'Sedang',
-        color: 'text-amber-700',
-        bg: 'bg-amber-50',
-        border: 'border-amber-100',
-        barColor: 'bg-amber-500',
-        icon: <Meh size={28} strokeWidth={2.5} />,
-        message: 'Beban mulai terasa, tetap fokus.'
-      };
-    }
-    return {
-      level: 'Tinggi',
-      color: 'text-rose-700',
-      bg: 'bg-rose-50',
-      border: 'border-rose-100',
-      barColor: 'bg-rose-500',
-      icon: <AlertTriangle size={28} strokeWidth={2.5} />,
-      message: 'Warning! Kurangi beban segera.'
+export function StressIndicator({ taskCount = 0 }: StressIndicatorProps) {
+  // Logic visual sederhana
+  const getStressLevel = (count: number) => {
+    if (count >= 5) return { 
+      label: 'Tinggi', 
+      color: 'bg-rose-500', 
+      text: 'text-rose-600', 
+      bgLight: 'bg-rose-50', 
+      icon: Frown, 
+      desc: 'Beban overload! Istirahat dulu sejenak.' 
+    };
+    if (count >= 3) return { 
+      label: 'Sedang', 
+      color: 'bg-amber-500', 
+      text: 'text-amber-600', 
+      bgLight: 'bg-amber-50', 
+      icon: Meh, 
+      desc: 'Fokus terjaga. Tetap semangat!' 
+    };
+    return { 
+      label: 'Rendah', 
+      color: 'bg-emerald-500', 
+      text: 'text-emerald-600', 
+      bgLight: 'bg-emerald-50', 
+      icon: Smile, 
+      desc: 'Pikiran tenang, siap produktif.' 
     };
   };
 
-  const status = getStressLevel();
-
-  const stressPercentage = Math.min((activeTasks / 10) * 100, 100);
+  const status = getStressLevel(taskCount); 
+  const Icon = status.icon;
 
   return (
-    <div className={`relative overflow-hidden p-6 rounded-2xl border transition-all duration-500 ${status.bg} ${status.border}`}>
-      
-      {/* Header Section */}
-      <div className="flex justify-between items-start mb-4 relative z-10">
+    <div className="bg-white rounded-2xl p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-slate-100 transition-all hover:shadow-md hover:-translate-y-0.5">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2 text-slate-400 text-xs font-bold tracking-wider uppercase">
+          <Activity size={16} className="text-slate-300" />
+          <span>Stress Monitor</span>
+        </div>
+        <div className={`px-3 py-1 rounded-full text-xs font-bold ${status.bgLight} ${status.text} ring-1 ring-inset ring-black/5`}>
+          {status.label}
+        </div>
+      </div>
+
+      <div className="flex items-end justify-between">
         <div>
-          <div className="flex items-center gap-2 mb-1 opacity-80">
-            <Activity size={16} className={status.color} />
-            <span className={`text-xs font-bold uppercase tracking-wider ${status.color}`}>Stress Monitor</span>
-          </div>
-          <h2 className={`text-3xl font-extrabold ${status.color} tracking-tight`}>
-            {status.level}
-          </h2>
+          <h3 className={`text-3xl font-black ${status.text} mb-1 tracking-tight`}>
+            {status.label}
+          </h3>
+          <p className="text-slate-500 text-sm font-medium">
+            {status.desc}
+          </p>
         </div>
-        
-        {/* Icon Container */}
-        <div className={`p-3 bg-white rounded-xl shadow-sm ${status.color}`}>
-          {status.icon}
+        <div className={`p-3.5 rounded-2xl ${status.bgLight} ${status.text}`}>
+          <Icon size={32} strokeWidth={2.5} />
         </div>
       </div>
-
-      {/* Info & Progress Bar Section */}
-      <div className="relative z-10">
-        <p className={`text-sm font-medium mb-4 opacity-90 ${status.color}`}>
-          {status.message}
-        </p>
-
-        <div className="flex items-center gap-3 text-xs font-bold">
-          {/* Custom Progress Bar */}
-          <div className="flex-1 h-2.5 bg-white/60 rounded-full overflow-hidden backdrop-blur-sm">
-            <div
-              className={`h-full rounded-full transition-all duration-1000 ease-out ${status.barColor}`}
-              style={{ width: `${Math.max(stressPercentage, 5)}%` }} 
-            />
-          </div>
-          <span className={status.color}>
-            {activeTasks} / {totalTasks} Aktif
-          </span>
-        </div>
+      
+      <div className="mt-6 h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+        <div 
+          className={`h-full ${status.color} transition-all duration-1000 ease-out`} 
+          style={{ width: taskCount >= 5 ? '100%' : taskCount >= 3 ? '60%' : '30%' }}
+        />
       </div>
-
-      {/* Hiasan Background (Glow Effect) */}
-      <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-current opacity-5 rounded-full blur-3xl pointer-events-none text-black" />
     </div>
   );
 }
