@@ -15,13 +15,16 @@ interface ItemBarang {
 }
 
 export default function ShopPage() {
-  // Gunakan interface di useState
   const [items, setItems] = useState<ItemBarang[]>([]);
 
-  useEffect(() => {
+  const fetchItems = () => {
     fetch('http://localhost:3000/api/barang')
       .then(res => res.json())
       .then((data: ItemBarang[]) => setItems(data));
+  };
+
+  useEffect(() => {
+    fetchItems();
   }, []);
 
   return (
