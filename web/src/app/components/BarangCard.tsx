@@ -3,11 +3,12 @@
 import { Package, ShoppingCart } from 'lucide-react';
 
 interface BarangProps {
+  id: string;
   nama: string;
   harga: number;
   satuan: string;
   stok: number;
-  onBeli: () => void;
+  onBeli: (id: string) => void;
 }
 
 export function BarangCard({ nama, harga, satuan, stok, onBeli }: BarangProps) {
@@ -26,7 +27,7 @@ export function BarangCard({ nama, harga, satuan, stok, onBeli }: BarangProps) {
       <div className="flex items-center justify-between pt-4 border-t border-slate-50">
         <span className="text-indigo-600 font-black text-xl">{harga} <span className="text-xs font-medium text-slate-400">Poin</span></span>
         <button 
-          onClick={onBeli}
+          onClick={onBeli(id)}
           className="bg-slate-900 text-white p-2.5 rounded-xl hover:bg-indigo-600 transition-all active:scale-95"
         >
           <ShoppingCart size={18} />
