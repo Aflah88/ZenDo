@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, Trash2, Calendar, Tag, AlertCircle } from 'lucide-react';
+import { Check, Trash2, Calendar } from 'lucide-react';
 
 interface Task {
   id: string;
