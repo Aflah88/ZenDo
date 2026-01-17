@@ -1,173 +1,108 @@
-"use client";
+'use client';
 
-import { 
-  CheckCircle2, 
-  Circle, 
-  Trash2, 
-  Calendar, 
-  AlertCircle, 
-  ArrowDown, 
-  Clock, 
-  Loader2, 
-  Inbox 
-} from "lucide-react";
+import { Check, Trash2, Calendar, Tag, AlertCircle } from 'lucide-react';
 
 interface Task {
   id: string;
   title: string;
-  description?: string;
   completed: boolean;
-  priority: "LOW" | "MEDIUM" | "HIGH";
+  priority: 'LOW' | 'MEDIUM' | 'HIGH';
   createdAt: string;
-  dueDate?: string;
   tags: string[];
 }
 
 interface TaskListProps {
   tasks: Task[];
   loading: boolean;
-  onToggle: (id: string, completed: boolean) => void;
+  onToggle: (id: string) => void;
   onDelete: (id: string) => void;
-  focusMode: boolean;
-  selectedTaskId: string | null;
-  onSelectTask: (id: string) => void;
 }
 
-// Helper untuk warna badge
-const getPriorityStyles = (priority: string) => {
-  switch (priority) {
-    case "HIGH":
-      return "bg-red-100 text-red-700 border-red-200";
-    case "MEDIUM":
-      return "bg-amber-100 text-amber-700 border-amber-200";
-    case "LOW":
-      return "bg-emerald-100 text-emerald-700 border-emerald-200";
-    default:
-      return "bg-gray-100 text-gray-700 border-gray-200";
-  }
-};
-
-// Helper untuk icon prioritas
-const PriorityIcon = ({ priority }: { priority: string }) => {
-  switch (priority) {
-    case "HIGH":
-      return <AlertCircle size={14} className="mr-1" />;
-    case "MEDIUM":
-      return <Clock size={14} className="mr-1" />;
-    case "LOW":
-      return <ArrowDown size={14} className="mr-1" />;
-    default:
-      return null;
-  }
-};
-
-export function TaskList({
-  tasks,
-  loading,
-  onToggle,
-  onDelete,
-  focusMode,
-  selectedTaskId,
-  onSelectTask,
-}: TaskListProps) {
+export function TaskList({ tasks, loading, onToggle, onDelete }: TaskListProps) {
   
-  // 1. Loading State dengan Spinner Animasi
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow p-12 flex flex-col items-center justify-center text-gray-400">
-        <Loader2 size={40} className="animate-spin text-indigo-500 mb-4" />
-        <p className="text-sm font-medium">Memuat tugas...</p>
+      <div className="space-y-4 animate-pulse">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-20 bg-slate-200 rounded-2xl w-full"></div>
+        ))}
       </div>
     );
   }
 
-  // 2. Empty State dengan Icon Inbox
   if (tasks.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow p-12 flex flex-col items-center justify-center text-gray-400">
-        <div className="bg-gray-50 p-4 rounded-full mb-4">
-          <Inbox size={48} className="text-gray-300" />
+      <div className="text-center py-16 bg-white rounded-3xl border border-dashed border-slate-200">
+        <div className="bg-indigo-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-500">
+          <Calendar size={28} />
         </div>
-        <h3 className="text-lg font-medium text-gray-900">Semua Beres!</h3>
-        <p className="text-sm mt-1">Tidak ada tugas aktif saat ini.</p>
+        <h3 className="text-lg font-bold text-slate-800">Hari yang tenang!</h3>
+        <p className="text-slate-400 text-sm mt-1">Belum ada misi. Tambahkan satu di atas.</p>
       </div>
     );
   }
 
+  const getPriorityColor = (p: string) => {
+    switch (p) {
+      case 'HIGH': return 'bg-rose-100 text-rose-700 border-rose-200';
+      case 'MEDIUM': return 'bg-amber-100 text-amber-700 border-amber-200';
+      default: return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+    }
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100">
+    <div className="space-y-3">
       {tasks.map((task) => (
-        <div
-          key={task.id}
-          onClick={() => focusMode && onSelectTask(task.id)}
-          className={`p-4 flex items-start gap-4 border-b last:border-b-0 hover:bg-gray-50 transition-colors cursor-pointer group ${
-            selectedTaskId === task.id && focusMode
-              ? "bg-indigo-50 border-l-4 border-indigo-600 pl-[1.2rem]" // Adjustment biar padding seimbang
-              : "border-l-4 border-transparent"
+        <div 
+          key={task.id} 
+          className={`group relative bg-white p-5 rounded-2xl transition-all duration-300 border border-slate-100 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-500/5 ${
+            task.completed ? 'opacity-60 bg-slate-50' : 'opacity-100'
           }`}
         >
-          {/* Checkbox Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggle(task.id, task.completed);
-            }}
-            className="mt-1 text-gray-400 hover:text-indigo-600 transition-colors shrink-0"
-          >
-            {task.completed ? (
-              <CheckCircle2 size={24} className="text-emerald-500" />
-            ) : (
-              <Circle size={24} />
-            )}
-          </button>
-
-          {/* Task Content */}
-          <div className="flex-1 min-w-0">
-            <p
-              className={`text-lg font-medium break-all transition-all ${
-                task.completed ? "line-through text-gray-400 decoration-gray-300" : "text-gray-800"
+          <div className="flex items-start gap-4">
+            
+            {/* Checkbox Button */}
+            <button
+              onClick={() => onToggle(task.id)}
+              className={`mt-1 flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                task.completed 
+                  ? 'bg-indigo-500 border-indigo-500 text-white scale-110' 
+                  : 'border-slate-300 text-transparent hover:border-indigo-400'
               }`}
             >
-              {task.title}
-            </p>
-            
-            {task.description && (
-              <p className="text-sm text-gray-500 mt-1 line-clamp-2">{task.description}</p>
-            )}
+              <Check size={14} strokeWidth={4} />
+            </button>
 
-            {/* Metadata (Priority & Date) */}
-            <div className="flex items-center gap-3 mt-3">
-              <span
-                className={`flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${getPriorityStyles(
-                  task.priority
-                )}`}
-              >
-                <PriorityIcon priority={task.priority} />
-                {task.priority}
-              </span>
-              
-              <div className="flex items-center text-xs text-gray-400">
-                <Calendar size={12} className="mr-1.5" />
-                {new Date(task.createdAt).toLocaleDateString("id-ID", {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric'
-                })}
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                {/* Priority Badge */}
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${getPriorityColor(task.priority)}`}>
+                  {task.priority}
+                </span>
+                {/* Date (Opsional, tampilkan jam simpel) */}
+                <span className="text-xs text-slate-400 flex items-center gap-1">
+                   • {new Date(task.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                </span>
               </div>
-            </div>
-          </div>
 
-          {/* Delete Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete(task.id);
-            }}
-            className="text-gray-300 hover:text-red-500 hover:bg-red-50 p-2 rounded-lg transition-all shrink-0 opacity-0 group-hover:opacity-100 focus:opacity-100"
-            title="Hapus Tugas"
-          >
-            <Trash2 size={18} />
-          </button>
+              <h4 className={`text-base font-semibold text-slate-800 truncate transition-all ${
+                task.completed ? 'line-through text-slate-400' : ''
+              }`}>
+                {task.title}
+              </h4>
+            </div>
+
+            {/* Delete Button (Muncul saat Hover) */}
+            <button
+              onClick={() => onDelete(task.id)}
+              className="p-2 text-slate-300 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all opacity-100 md:opacity-0 group-hover:opacity-100"
+              title="Hapus Misi"
+            >
+              <Trash2 size={18} />
+            </button>
+
+          </div>
         </div>
       ))}
     </div>
