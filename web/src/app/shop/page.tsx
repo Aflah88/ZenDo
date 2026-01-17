@@ -25,6 +25,25 @@ export default function ShopPage() {
 
   useEffect(() => {
     fetchItems();
+    const handleBeli = async (id: string) => {
+    try {
+      const res = await fetch('http://localhost:3000/api/barang/beli', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+
+      if (res.ok) {
+        alert('Pembelian berhasil!');
+        fetchItems(); // Refresh data otomatis
+      } else {
+        const error = await res.json();
+        alert(error.error || 'Gagal membeli');
+      }
+    } catch (err) {
+      console.error('Error transaction:', err);
+    }
+  };
   }, []);
 
   return (
