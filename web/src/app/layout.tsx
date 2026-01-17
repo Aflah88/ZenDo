@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
+const inter = Inter({ subsets: ["latin"] });
+
 export const metadata: Metadata = {
-  title: "Aplikasi Barang",
-  description: "Manajemen Data Barang",
+  title: "ZenDo - Productivity App",
+  description: "Manajemen tugas mahasiswa dengan indikator stres.",
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="id">
-      <body>
-        <nav className="bg-blue-600 text-white p-4">
-          <h1 className="text-2xl font-bold">Manajemen Barang</h1>
-        </nav>
+    <html lang="id" className="scroll-smooth">
+      <body className={`${inter.className} antialiased text-slate-800 bg-gray-50 selection:bg-indigo-100 selection:text-indigo-900`}>
         {children}
       </body>
     </html>
