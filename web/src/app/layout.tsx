@@ -17,7 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
-      <body className={`${inter.className} antialiased bg-gray-50 text-slate-900`}>
+      <body className={`${inter.className} antialiased bg-gray-50 text-slate-900`}
+        suppressHydrationWarning={true}>
+        
         <Navbar />
 
         <main className="min-h-screen">
