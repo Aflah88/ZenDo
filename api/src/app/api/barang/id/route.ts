@@ -1,51 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../../../../lib/db';
 
-const prisma = new PrismaClient();
+// PATCH - Update data barang
+export async function PATCH(request: NextRequest) {
+    try {
+        const body = await request.json();
+        const { id, ...updateData } = body;
 
-// GET - Ambil data berdasarkan ID
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const barang = await prisma.barang.findUnique({
-      where: { id: parseInt(params.id) },
-    });
-    return NextResponse.json(barang);
-  } catch (error) {
-    return NextResponse.json({ error: 'Data tidak ditemukan' }, { status: 404 });
-  }
+        const updated = await prisma.barang.update({
+            where: { id },
+            data: updateData
+        });
+
+        return NextResponse.json(updated);
+    } catch (error) {
+        return NextResponse.json({ error: 'Gagal update barang' }, { status: 500 });
+    }
 }
 
-// PUT - Update data
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const body = await request.json();
-    const barang = await prisma.barang.update({
-      where: { id: parseInt(params.id) },
-      data: body,
-    });
-    return NextResponse.json(barang);
-  } catch (error) {
-    return NextResponse.json({ error: 'Gagal update data' }, { status: 500 });
-  }
-}
+// DELETE - Hapus barang
+export async function DELETE(request: NextRequest) {
+    try {
+        const { searchParams } = new URL(request.url);
+        const id = searchParams.get('id');
 
-// DELETE - Hapus data
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    await prisma.barang.delete({
-      where: { id: parseInt(params.id) },
-    });
-    return NextResponse.json({ message: 'Data dihapus' });
-  } catch (error) {
-    return NextResponse.json({ error: 'Gagal menghapus data' }, { status: 500 });
-  }
+        if (!id) return NextResponse.json({ error: 'ID dibutuhkan' }, { status: 400 });
+
+        await prisma.barang.delete({ where: { id } });
+        return NextResponse.json({ message: 'Barang berhasil dihapus' });
+    } catch (error) {
+        return NextResponse.json({ error: 'Gagal hapus barang' }, { status: 500 });
+    }
 }
