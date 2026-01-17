@@ -5,13 +5,23 @@ import { BarangCard } from '../components/BarangCard';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
+// DEFINISI TYPE BIAR ESLINT DIAM
+interface ItemBarang {
+  id: string;
+  nama: string;
+  harga: number;
+  satuan: string;
+  stok: number;
+}
+
 export default function ShopPage() {
-  const [items, setItems] = useState([]);
+  // Gunakan interface di useState
+  const [items, setItems] = useState<ItemBarang[]>([]);
 
   useEffect(() => {
     fetch('http://localhost:3000/api/barang')
       .then(res => res.json())
-      .then(data => setItems(data));
+      .then((data: ItemBarang[]) => setItems(data));
   }, []);
 
   return (
@@ -25,14 +35,14 @@ export default function ShopPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {items.map((item: any) => (
+          {items.map((item) => ( // Tidak perlu 'any' lagi di sini
             <BarangCard 
               key={item.id}
               nama={item.nama}
               harga={item.harga}
               satuan={item.satuan}
               stok={item.stok}
-              onBeli={() => alert('Fitur beli menyusul!')}
+              onBeli={() => alert(`Membeli ${item.nama}`)}
             />
           ))}
         </div>
