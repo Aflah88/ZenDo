@@ -11,7 +11,7 @@ interface BarangProps {
   onBeli: (id: string) => void;
 }
 
-export function BarangCard({ nama, harga, satuan, stok, onBeli }: BarangProps) {
+export function BarangCard({ id, nama, harga, satuan, stok, onBeli }: BarangProps) {
   return (
     <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all group">
       <div className="flex justify-between items-start mb-4">
@@ -22,12 +22,14 @@ export function BarangCard({ nama, harga, satuan, stok, onBeli }: BarangProps) {
           Stok: {stok}
         </span>
       </div>
+      
       <h3 className="text-lg font-bold text-slate-800 mb-1">{nama}</h3>
       <p className="text-slate-400 text-sm mb-4">{satuan}</p>
+      
       <div className="flex items-center justify-between pt-4 border-t border-slate-50">
         <span className="text-indigo-600 font-black text-xl">{harga} <span className="text-xs font-medium text-slate-400">Poin</span></span>
         <button 
-          onClick={onBeli(id)}
+          onClick={() => onBeli(id)}
           className="bg-slate-900 text-white p-2.5 rounded-xl hover:bg-indigo-600 transition-all active:scale-95"
         >
           <ShoppingCart size={18} />
