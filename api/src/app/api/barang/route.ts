@@ -1,31 +1,36 @@
-import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '../../../lib/db';
 
-const prisma = new PrismaClient();
-
-// GET - Ambil semua data
+// GET - Ambil semua daftar barang
 export async function GET() {
-  try {
-    const barang = await prisma.barang.findMany();
-    return NextResponse.json(barang);
-  } catch (error) {
-    return NextResponse.json({ error: 'Gagal mengambil data' }, { status: 500 });
-  }
+    try {
+        const items = await prisma.barang.findMany({
+            orderBy: { nama: 'asc' }
+        });
+        return NextResponse.json(items, { status: 200 });
+    } catch (error) {
+        return NextResponse.json({ error: 'Gagal mengambil data barang' }, { status: 500 });
+    }
 }
 
-// POST - Tambah data baru
+// POST - Tambah barang baru
 export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const barang = await prisma.barang.create({
-      data: {
-        kode: body.kode,
-        nama: body.nama,
-        satuan: body.satuan,
-      },
-    });
-    return NextResponse.json(barang, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ error: 'Gagal menambah data' }, { status: 500 });
-  }
+    try {
+        const body = await request.json();
+        const { kode, nama, satuan, harga, stok } = body;
+
+        const newBarang = await prisma.barang.create({
+            data: { 
+                kode, 
+                nama, 
+                satuan, 
+                harga: Number(harga), 
+                stok: Number(stok || 0) 
+            }
+        });
+
+        return NextResponse.json(newBarang, { status: 201 });
+    } catch (error) {
+        return NextResponse.json({ error: 'Gagal menambah barang' }, { status: 500 });
+    }
 }
