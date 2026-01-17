@@ -1,75 +1,50 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, AlertCircle, ArrowDown, Clock } from 'lucide-react';
+import { Plus, Sparkles } from 'lucide-react';
 
 interface TaskFormProps {
-  onAddTask: (title: string, priority: string) => void;
+  onAddTask: (text: string) => void;
 }
 
 export function TaskForm({ onAddTask }: TaskFormProps) {
-  const [input, setInput] = useState('');
-  const [priority, setPriority] = useState('MEDIUM');
+  const [text, setText] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (input.trim()) {
-      onAddTask(input, priority);
-      setInput('');
-      setPriority('MEDIUM');
-    }
-  };
-
-  // Helper untuk menampilkan icon sesuai state priority yang dipilih
-  const getPriorityIcon = () => {
-    switch (priority) {
-      case 'HIGH': return <AlertCircle size={18} className="text-rose-500" />;
-      case 'LOW': return <ArrowDown size={18} className="text-emerald-500" />;
-      default: return <Clock size={18} className="text-amber-500" />;
+    if (text.trim()) {
+      onAddTask(text);
+      setText('');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-8 relative group">
-      <div className="flex flex-col sm:flex-row gap-3 bg-white p-2 rounded-2xl shadow-sm border border-gray-100 focus-within:shadow-md focus-within:border-indigo-200 transition-all duration-300">
+    <form onSubmit={handleSubmit} className="relative group z-10">
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl opacity-20 group-hover:opacity-40 transition duration-500 blur-sm"></div>
+      
+      <div className="relative flex items-center bg-white p-2 rounded-2xl shadow-sm border border-slate-200 focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all duration-300">
         
-        {/* Input Text */}
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Mau produktif apa hari ini?"
-          className="flex-1 px-4 py-3 bg-transparent outline-none text-slate-700 placeholder:text-slate-400 font-medium"
-        />
-
-        {/* Priority Selector Area */}
-        <div className="relative border-t sm:border-t-0 sm:border-l border-gray-100 flex items-center pl-3">
-          
-          {/* Visual Icon (Berubah sesuai pilihan) */}
-          <div className="pointer-events-none">
-            {getPriorityIcon()}
-          </div>
-
-          {/* Native Select (Transparent) */}
-          <select
-            value={priority}
-            onChange={(e) => setPriority(e.target.value)}
-            className="w-full sm:w-auto h-full pl-2 pr-8 py-3 bg-transparent outline-none text-sm font-semibold text-slate-600 cursor-pointer hover:text-indigo-600 transition-colors appearance-none"
-          >
-            <option value="LOW">Low</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="HIGH">High</option>
-          </select>
+        {/* Icon Hiasan Kiri */}
+        <div className="pl-4 pr-2 text-slate-400">
+          <Sparkles size={20} />
         </div>
 
-        {/* Submit Button */}
+        {/* Input Field */}
+        <input
+          type="text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Mau produktif apa hari ini?"
+          className="flex-1 bg-transparent py-3 px-2 text-slate-800 placeholder:text-slate-400 font-medium focus:outline-none"
+        />
+
+        {/* Tombol Submit */}
         <button
           type="submit"
-          disabled={!input.trim()}
-          className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:hover:bg-indigo-600 text-white p-3 sm:px-6 rounded-xl font-semibold transition-all shadow-md hover:shadow-indigo-200 flex items-center justify-center gap-2"
+          disabled={!text.trim()}
+          className="bg-slate-900 hover:bg-indigo-600 text-white p-3 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/20"
         >
           <Plus size={20} strokeWidth={3} />
-          <span className="hidden sm:inline">Tambah</span>
         </button>
       </div>
     </form>
