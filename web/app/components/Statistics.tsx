@@ -4,7 +4,6 @@ import {
   ListTodo, 
   CheckCircle2, 
   Zap, 
-  Trophy 
 } from "lucide-react";
 
 interface StatisticsProps {
