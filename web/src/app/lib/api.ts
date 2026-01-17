@@ -6,6 +6,13 @@ export const apiClient = axios.create({
   baseURL: API_URL,
 });
 
+export interface BarangInput {
+  kode: string;
+  nama: string;
+  satuan: string;
+  harga: number;
+}
+
 // GET semua barang
 export const getBarang = () => apiClient.get('/barang');
 
@@ -13,10 +20,10 @@ export const getBarang = () => apiClient.get('/barang');
 export const getBarangById = (id: number) => apiClient.get(`/barang/${id}`);
 
 // POST barang baru
-export const createBarang = (data: any) => apiClient.post('/barang', data);
+export const createBarang = (data: BarangInput) => apiClient.post('/barang', data);
 
 // PUT update barang
-export const updateBarang = (id: number, data: any) =>
+export const updateBarang = (id: number, data: BarangInput) =>
   apiClient.put(`/barang/${id}`, data);
 
 // DELETE barang
