@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { createBarang, type BarangInput } from '../../lib/api'; 
+import { createBarang, type BarangInput } from '../../../lib/api'; 
 import { ArrowLeft, Save, Loader2, Gift, AlignLeft, Tag, Coins } from 'lucide-react';
 
 export default function AddBarangPage() {
