@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { getBarang, deleteBarang } from '@/lib/api';
-import { Plus, Pencil, Trash2, Package, Search } from 'lucide-react';
+import { getBarang, deleteBarang } from '../app/lib/api';
+import { Plus, Pencil, Trash2, Package } from 'lucide-react';
 
 interface Barang {
   id: number;
