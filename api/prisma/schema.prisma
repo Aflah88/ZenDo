@@ -32,3 +32,14 @@ model Reward {
   harga     Int      // Poin yang dibutuhkan
   createdAt DateTime @default(now())
 }
+
+model Barang {
+  id        String   @id @default(cuid())
+  kode      String   @unique
+  nama      String
+  satuan    String   
+  harga     Int      
+  stok      Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
