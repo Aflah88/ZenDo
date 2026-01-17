@@ -81,7 +81,9 @@ export function StressIndicator({ activeTasks, totalTasks }: StressIndicatorProp
               style={{ width: `${Math.max(stressPercentage, 5)}%` }} 
             />
           </div>
-          <span className={status.color}>{activeTasks} Beban Aktif</span>
+          <span className={status.color}>
+            {activeTasks} / {totalTasks} Aktif
+          </span>
         </div>
       </div>
 
