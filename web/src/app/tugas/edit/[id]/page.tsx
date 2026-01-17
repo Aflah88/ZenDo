@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-import { getBarangById, updateBarang, type BarangInput } from '../../../lib/api'; 
+import { getBarangById, updateBarang, type BarangInput } from '../../../../lib/api'; 
 import { ArrowLeft, Save, Loader2, PencilRuler, Gift, Coins, AlignLeft } from 'lucide-react';
 
 export default function EditBarangPage() {
