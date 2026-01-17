@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { getBarang, deleteBarang } from '../app/lib/api';
+import { getBarang, deleteBarang } from '../app/lib/api'; 
 import { Plus, Pencil, Trash2, Package } from 'lucide-react';
 
 interface Barang {
@@ -24,7 +24,6 @@ export default function BarangPage() {
   const fetchBarang = async () => {
     try {
       const response = await getBarang();
-      // Pastikan struktur response sesuai dengan API backend 
       setBarang(response.data.barang || []); 
     } catch (error) {
       console.error('Gagal mengambil data:', error);
