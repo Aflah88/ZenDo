@@ -47,12 +47,46 @@ export function StressIndicator({ activeTasks, totalTasks }: StressIndicatorProp
   const stressPercentage = Math.min((activeTasks / 10) * 100, 100);
 
   return (
-    <div className={`p-6 rounded-2xl border transition-all ${status.bg} ${status.border}`}>
-      <div className="flex items-center gap-2">
-        {status.icon}
-        <h2 className={`text-2xl font-bold ${status.color}`}>{status.level}</h2>
+    <div className={`relative overflow-hidden p-6 rounded-2xl border transition-all duration-500 ${status.bg} ${status.border}`}>
+      
+      {/* Header Section */}
+      <div className="flex justify-between items-start mb-4 relative z-10">
+        <div>
+          <div className="flex items-center gap-2 mb-1 opacity-80">
+            <Activity size={16} className={status.color} />
+            <span className={`text-xs font-bold uppercase tracking-wider ${status.color}`}>Stress Monitor</span>
+          </div>
+          <h2 className={`text-3xl font-extrabold ${status.color} tracking-tight`}>
+            {status.level}
+          </h2>
+        </div>
+        
+        {/* Icon Container */}
+        <div className={`p-3 bg-white rounded-xl shadow-sm ${status.color}`}>
+          {status.icon}
+        </div>
       </div>
-      <p className={`mt-2 text-sm ${status.color}`}>{status.message}</p>
+
+      {/* Info & Progress Bar Section */}
+      <div className="relative z-10">
+        <p className={`text-sm font-medium mb-4 opacity-90 ${status.color}`}>
+          {status.message}
+        </p>
+
+        <div className="flex items-center gap-3 text-xs font-bold">
+          {/* Custom Progress Bar */}
+          <div className="flex-1 h-2.5 bg-white/60 rounded-full overflow-hidden backdrop-blur-sm">
+            <div
+              className={`h-full rounded-full transition-all duration-1000 ease-out ${status.barColor}`}
+              style={{ width: `${Math.max(stressPercentage, 5)}%` }} 
+            />
+          </div>
+          <span className={status.color}>{activeTasks} Beban Aktif</span>
+        </div>
+      </div>
+
+      {/* Hiasan Background (Glow Effect) */}
+      <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-current opacity-5 rounded-full blur-3xl pointer-events-none text-black" />
     </div>
   );
 }
