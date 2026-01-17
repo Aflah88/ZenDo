@@ -2,29 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Kita set default body pakai CSS native biar aman */
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
 body {
-  background-color: #f9fafb; /* Setara bg-gray-50 */
-  color: #0f172a;          /* Setara text-slate-900 */
-}
-
-/* Custom Scrollbar */
-/* Ganti @apply dengan CSS biasa untuk menghindari build error */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #d1d5db; /* Setara bg-gray-300 */
-  border-radius: 9999px;     /* Setara rounded-full */
-  border: 2px solid transparent;
-  background-clip: content-box;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #9ca3af; /* Setara hover:bg-gray-400 */
+  color: rgb(var(--foreground-rgb));
+  background: #F8FAFC;
 }
