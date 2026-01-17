@@ -3,44 +3,49 @@
 import { useState, useEffect } from 'react';
 import { StressIndicator, Statistics, TaskForm, TaskList } from '../app/components';
 
-// Definisi tipe data tugas
 interface Task {
   id: string;
-  text: string;
+  title: string;          
   completed: boolean;
+  priority: 'Low' | 'Medium' | 'High';
+  createdAt: string;      
+  tags: string[];         
 }
 
 export default function Home() {
-  // 1. STATE MANAGEMENT (Otak Aplikasi)
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load data dari LocalStorage saat pertama buka (Client Side Only)
+  // Load data (Client Side Only)
   useEffect(() => {
-    const saved = localStorage.getItem('zendo-tasks');
-    if (saved) {
-      try {
-        setTasks(JSON.parse(saved));
-      } catch (e) {
-        console.error('Gagal load data', e);
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('zendo-tasks');
+      if (saved) {
+        try {
+          setTasks(JSON.parse(saved));
+        } catch (e) {
+          console.error('Gagal load data', e);
+        }
       }
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
-  // Simpan ke LocalStorage setiap ada perubahan tasks
+  // Simpan data
   useEffect(() => {
-    if (!loading) {
+    if (!loading && typeof window !== 'undefined') {
       localStorage.setItem('zendo-tasks', JSON.stringify(tasks));
     }
   }, [tasks, loading]);
 
-  // 2. LOGIC HANDLERS (Aksi)
   const addTask = (text: string) => {
     const newTask: Task = {
       id: Date.now().toString(),
-      text,
+      title: text,
       completed: false,
+      priority: 'Medium', // Default priority
+      createdAt: new Date().toISOString(),
+      tags: ['General']   // Default tag
     };
     setTasks((prev) => [newTask, ...prev]);
   };
@@ -55,7 +60,7 @@ export default function Home() {
     setTasks((prev) => prev.filter((t) => t.id !== id));
   };
 
-  // 3. KALKULASI STATISTIK
+  // Statistik
   const totalTasks = tasks.length;
   const completedTasks = tasks.filter((t) => t.completed).length;
   const activeTasks = totalTasks - completedTasks;
@@ -76,7 +81,6 @@ export default function Home() {
 
         {/* Component 1: Stress Indicator */}
         <div className="w-full">
-           {/* Kita pasang semua kemungkinan props biar TS puas */}
            <StressIndicator 
              taskCount={activeTasks} 
              activeTasks={activeTasks} 
