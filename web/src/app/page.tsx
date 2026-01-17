@@ -3,13 +3,14 @@
 import { useState, useEffect } from 'react';
 import { StressIndicator, Statistics, TaskForm, TaskList } from '../app/components';
 
+// FIX 1: Samakan tipe data dengan komponen TaskList (Priority Huruf Besar)
 interface Task {
   id: string;
-  title: string;          
+  title: string;
   completed: boolean;
-  priority: 'Low' | 'Medium' | 'High';
-  createdAt: string;      
-  tags: string[];         
+  priority: 'LOW' | 'MEDIUM' | 'HIGH'; // Uppercase biar jodoh sama TaskList
+  createdAt: string;
+  tags: string[];
 }
 
 export default function Home() {
@@ -22,6 +23,7 @@ export default function Home() {
       const saved = localStorage.getItem('zendo-tasks');
       if (saved) {
         try {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setTasks(JSON.parse(saved));
         } catch (e) {
           console.error('Gagal load data', e);
@@ -38,14 +40,15 @@ export default function Home() {
     }
   }, [tasks, loading]);
 
+  // FIX 2: Update default priority jadi 'MEDIUM' (Uppercase)
   const addTask = (text: string) => {
     const newTask: Task = {
       id: Date.now().toString(),
       title: text,
       completed: false,
-      priority: 'Medium', // Default priority
+      priority: 'MEDIUM', // Default harus Uppercase
       createdAt: new Date().toISOString(),
-      tags: ['General']   // Default tag
+      tags: ['General']
     };
     setTasks((prev) => [newTask, ...prev]);
   };
