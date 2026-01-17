@@ -2,55 +2,42 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Package, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Zap } from 'lucide-react';
 
 export function Navbar() {
-     const pathname = usePathname();
+  const pathname = usePathname();
 
-    const isActive = (path: string) => pathname === path;
+  const navItems = [
+    { name: 'Misi', href: '/', icon: LayoutDashboard },
+    { name: 'Toko', href: '/shop', icon: ShoppingBag },
+  ];
 
-    return (
-        <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 mb-6">
-            <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        
-                {/* Logo Area */}
-                <Link href="/" className="flex items-center gap-2 group">
-                    <div className="bg-indigo-600 p-1.5 rounded-lg group-hover:rotate-12 transition-transform">
-                        <ShieldCheck size={20} className="text-white" />
-                    </div>
-                    <span className="font-bold text-xl tracking-tight text-slate-800">
-                        Zen<span className="text-indigo-600">Do</span>.
-                    </span>
-                </Link>
-
-                {/* Navigation Links */}
-                <div className="flex items-center gap-1 md:gap-4">
-                    <Link 
-                        href="/" 
-                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                            isActive('/') 
-                            ? 'bg-indigo-50 text-indigo-700 shadow-sm ring-1 ring-indigo-200' 
-                            : 'text-slate-500 hover:text-indigo-600 hover:bg-slate-50'
-                        }`}
-                    >
-                        <LayoutDashboard size={16} />
-                        <span className="hidden md:inline">Dashboard</span>
-                    </Link>
-
-                    <Link 
-                        href="/barang" 
-                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                            isActive('/barang') || pathname.startsWith('/barang')
-                            ? 'bg-indigo-50 text-indigo-700 shadow-sm ring-1 ring-indigo-200' 
-                            : 'text-slate-500 hover:text-indigo-600 hover:bg-slate-50'
-                        }`}
-                    >
-                        <Package size={16} />
-                        <span className="hidden md:inline">Inventaris</span>
-                    </Link>
-                </div>
-
-            </div>
-        </nav>
-    );
+  return (
+    <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md border border-white/10 px-6 py-3 rounded-3xl shadow-2xl z-50 transition-all duration-300">
+      <div className="flex items-center gap-8">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = pathname === item.href;
+          
+          return (
+            <Link 
+              key={item.name} 
+              href={item.href}
+              className={`flex items-center gap-2 transition-all ${
+                isActive ? 'text-indigo-400 scale-105' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Icon size={20} />
+              <span className="text-sm font-bold tracking-wide">{item.name}</span>
+            </Link>
+          );
+        })}
+        <div className="h-4 w-[1px] bg-slate-700" />
+        <div className="flex items-center gap-1.5 text-amber-400">
+          <Zap size={18} fill="currentColor" />
+          <span className="text-sm font-black">1.250</span>
+        </div>
+      </div>
+    </nav>
+  );
 }
