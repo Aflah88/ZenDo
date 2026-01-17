@@ -57,14 +57,15 @@ export default function ShopPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {items.map((item) => ( // Tidak perlu 'any' lagi di sini
+          {items.map((item) => ( 
             <BarangCard 
-              key={item.id}
-              nama={item.nama}
-              harga={item.harga}
-              satuan={item.satuan}
-              stok={item.stok}
-              onBeli={() => alert(`Membeli ${item.nama}`)}
+                key={item.id}
+                id={item.id} 
+                nama={item.nama}
+                harga={item.harga}
+                satuan={item.satuan}
+                stok={item.stok}
+                onBeli={handleBeli}
             />
           ))}
         </div>
