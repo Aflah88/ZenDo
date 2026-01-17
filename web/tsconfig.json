@@ -5,6 +5,7 @@
     "jsx": "preserve",
     "module": "esnext",
     "moduleResolution": "bundler",
+
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -13,11 +14,19 @@
     "isolatedModules": true,
     "noEmit": true,
     "incremental": true,
-    "plugins": [{ "name": "next" }],
+
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": ["./*"]
+    },
+
+    "plugins": [{ "name": "next" }]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }
